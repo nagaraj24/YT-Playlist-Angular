@@ -8,8 +8,8 @@ iframe {
     outline: none;
 }
 button {
-    background: red;
-    border: 3px solid red;
+    background: #9E2A00;
+    border: 3px solid #9E2A00;
     color: white;
     font-weight: 500;
     cursor: pointer;

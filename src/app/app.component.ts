@@ -24,7 +24,7 @@ export class AppComponent {
   });
   constructor(private sanitizer: DomSanitizer) {
     this.dangerousVideoUrl = 'https://www.youtube.com/embed/videoseries?list='+this.PlaylistID+'&controls=0&rel=0&showinfo=0&autoplay=1';
-  
+    this.videoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.dangerousVideoUrl);
   }
   
 
