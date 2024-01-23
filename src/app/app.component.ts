@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, Inject  } from '@angular/core';
+import { CommonModule, DOCUMENT  } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl, SafeUrl} from '@angular/platform-browser';
@@ -17,22 +17,40 @@ export class AppComponent {
   
   dangerousVideoUrl!: string;
   IframeShow:boolean= false;
+  IsDisabled:boolean=true;
   videoUrl!: SafeResourceUrl;
   applyForm = new FormGroup({
     youtubePlaylistId: new FormControl(''),
     
   });
-  constructor(private sanitizer: DomSanitizer) {
-    this.dangerousVideoUrl = 'https://www.youtube.com/embed/videoseries?list='+this.PlaylistID+'&controls=0&rel=0&showinfo=0&autoplay=1';
-    this.videoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.dangerousVideoUrl);
+  constructor(private sanitizer: DomSanitizer, @Inject(DOCUMENT) private document: Document) {
+    const localStorage = document.defaultView?.localStorage;
+    if(localStorage){
+      this.PlaylistID = localStorage.getItem('localPlayListID');
+      console.log(this.PlaylistID);
+      this.dangerousVideoUrl = 'https://www.youtube.com/embed/videoseries?list='+this.PlaylistID+'&controls=1&rel=0&showinfo=0&autoplay=1';
+      this.videoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.dangerousVideoUrl);
+      this.IframeShow = true;
+    }
+  
   }
   
-
+  Onchanage(event: any){
+    let youtubePlaylistId = event.target.value;
+    console.log(youtubePlaylistId);
+    if(youtubePlaylistId!=="" && youtubePlaylistId!=undefined){
+      this.IsDisabled =false;
+    }
+    else {
+      this.IsDisabled =true;
+    }
+  }
   updateVideoUrl() {
    
     this.IframeShow = true;
     this.PlaylistID = this.applyForm.value.youtubePlaylistId ?? "";
-    this.dangerousVideoUrl = 'https://www.youtube.com/embed/videoseries?list='+this.PlaylistID+'&controls=0&rel=0&showinfo=0&autoplay=1';
+    localStorage.setItem('localPlayListID',  this.PlaylistID);
+    this.dangerousVideoUrl = 'https://www.youtube.com/embed/videoseries?list='+this.PlaylistID+'&controls=1&rel=0&showinfo=0&autoplay=1';
     this.videoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.dangerousVideoUrl);
     this.applyForm.reset();
   }

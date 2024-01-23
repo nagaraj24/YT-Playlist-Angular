@@ -14,3 +14,7 @@ button {
     font-weight: 500;
     cursor: pointer;
 }
+button:disabled{
+    opacity: .5;
+    cursor: no-drop;
+}

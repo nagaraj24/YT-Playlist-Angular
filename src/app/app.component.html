@@ -1,8 +1,8 @@
 <h1>{{title | uppercase}}</h1>
 <form [formGroup]="applyForm" (submit)="updateVideoUrl()">
   
-  <input id="playlist_id" type="text" placeholder="Youtube Playlist ID" formControlName="youtubePlaylistId" />
-  <button type="submit" class="primary">Submit now</button>
+  <input id="playlist_id" type="text" (blur)="Onchanage($event)" placeholder="Youtube Playlist ID" formControlName="youtubePlaylistId" />
+  <button type="submit" [disabled]="IsDisabled" class="primary">Submit now</button>
 </form>
 
 @if(IframeShow){
